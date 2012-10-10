@@ -1,0 +1,8 @@
+export(McmcLongStan)
+export(make_stan_names)
+export(run_stan_model)
+exportClasses(McmcLongStan)
+exportMethods(write.stan)
+import(mcmc4)
+import(plyr)
+import(stringr)

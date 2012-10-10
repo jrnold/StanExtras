@@ -1,0 +1,22 @@
+Package: StanExtras
+Maintainer: Jeffrey Arnold <jeffrey.arnold@gmail.com>
+Author: jrnold
+Version: 1.0
+License: GPL-3
+Title: 
+Description: 
+Depends:
+    methods,
+    mcmc4
+Imports:
+    plyr,
+    stringr
+Suggests:
+    testthat,
+    roxygen2
+Collate:
+    'utilities.R'
+    'run_stan.R'
+    'StanExtras-package.R'
+    'write.stan.R'
+    'read.stan.R'
