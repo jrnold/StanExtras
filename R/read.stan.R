@@ -1,3 +1,11 @@
+## This is needed to get rbind2 to work correctly for
+## the classes inheriting from data.frame
+setMethod("rbind2", c(x="data.frame", y="data.frame"),
+          function(x, y, ...) {
+              base::rbind.data.frame(x, y)
+          })
+
+
 setClass("McmcStanChains", contains="data.frame")
 ## ## By Chain
 ## stan_version_major = "integer",
@@ -26,9 +34,19 @@ setClass("McmcStanParChains", contains="data.frame")
 ## treedepth = "integer",
 ## rejected = "logical",
 
+## setMethod("rbind2", "McmcStanParChains",
+##           function(x, ...) {
+##               new("McmcStanParChains", rbind.data.frame(x, ...))
+##           })
+
 setClass("McmcStanChainIters", contains="data.frame")
 ## ## By chain-parameter
 ## step_size_multipliers = "numeric",
+
+## setMethod("rbind2", "McmcStanChainIters",
+##           function(x, ...) {
+##               new("McmcStanChainIters", rbind.data.frame(x, ...))
+##           })
 
 ##' MCMC samples from Stan (Long shape)
 ##'
@@ -91,13 +109,7 @@ parse_stan_header_file <- function(file) {
     parse_stan_header_lines(readLines(file, 30))
 }
 
-##' Read STAN output
-##'
-##' @param file \code{character} name of output file produced by a STAN model.
-##' @return \code{McmcStan} object.
-##' @export
-##'
-McmcLongStan <- function(file, chain=1) {
+read_stan_csv <- function(file, chain=1) {
     header <- parse_stan_header_file(file)
     step_size_multipliers <- header$step_size_multipliers
     header$step_size_multipliers <- NULL
@@ -159,6 +171,30 @@ McmcLongStan <- function(file, chain=1) {
         chain_iters = mcmc_stan_chain_iter)
 }
 
-c_mcmc_long_stan <- function(x) {
-    
+##' Read STAN output
+##'
+##' @param file \code{character} name of output file produced by a STAN model.
+##' @return \code{McmcStan} object.
+##' @export
+##'
+McmcLongStan <- function(files, chain=seq_along(files)) {
+    do.call(c, mapply(function(x, i) read_stan_csv(x, i),
+                      files, chain, SIMPLIFY=FALSE, USE.NAMES=FALSE))
 }
+
+## Combine McmcLongStan objects
+##' @exportMethod c
+
+c_mcmc_long_stan <- function(x, ...) {
+    objects <- c(list(x), list(...))
+    new("McmcLongStan",
+        callNextMethod(x, ...),
+        chains = new("McmcStanChains",
+        Reduce(rbind2, lapply(objects, slot, "chains"))),
+        par_chains = new("McmcStanParChains",
+        Reduce(rbind2, lapply(objects, slot, "par_chains"))),
+        chain_iters = new("McmcStanChainIters",
+        Reduce(rbind2, lapply(objects, slot, "chain_iters"))))
+}
+
+setMethod("c", c(x="McmcLongStan"), c_mcmc_long_stan)
