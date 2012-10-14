@@ -55,7 +55,9 @@ trunc_inf <- function(x) {
     x
 }
 
-.write.stan <- function(list, file = "standata.R", append = FALSE, envir = parent.frame(),
+write_stan_default <- function(list, file = "standata.R", append = FALSE,
+                        scalars = character(),
+                        envir = parent.frame(),
                         precheck=TRUE, width = options("width")$width,
                         ...)
 {
@@ -110,7 +112,7 @@ trunc_inf <- function(x) {
         ## 2. vector: length > 1
         ## 3. array / matrix
         if (is.null(dim(vv))) {
-            if (length(vv) == 1) {
+            if (length(vv) == 1 && v %in% scalars) {
                 cat0(charv, "\n", file=file)
             } else {
                 cat0(str_wrap(sprintf("c(%s)", charv), width=width), "\n",
@@ -125,12 +127,27 @@ trunc_inf <- function(x) {
     }
 }
 
+##' Methods for function \code{write.stan}
+##'
+##' This writes dump files, like \code{\link{dump}}, but with a few
+##' tweaks to ensure that they will works as input for Stan.
+##'
+##' @param list Data objects to write to file
+##' @param file \code{character} output file name
+##' @param append \code{logical} If \code{TRUE}, then append to the file.
+##' @param scalars \code{character} Names of scalar variables.
+##' @param envir \code{environment} In which to look for varaibles.
+##' @param precheck \code{logical} Check for errors before writing to file.
+##' @param width \code{numeric} Width of lines in the output file.
+##' @aliases write_stan-methods
+##' @aliases write_stan,character-method
+##' @aliases write_stan,list-method
 ##' @export
-setGeneric("write.stan", function(list, ...) { standardGeneric("write.stan")})
-##' @export
-setMethod("write.stan", "character", .write.stan)
-##' @export
-setMethod("write.stan", "list",
+setGeneric("write_stan", function(list, ...) { standardGeneric("write.stan")})
+
+setMethod("write_stan", "character", write_stan_default)
+
+setMethod("write_stan", "list",
           function(list, ...) {
               write.stan(names(list), envir=as.environment(list), ...)
           })
