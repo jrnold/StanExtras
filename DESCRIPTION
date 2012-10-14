@@ -1,10 +1,13 @@
 Package: StanExtras
 Maintainer: Jeffrey Arnold <jeffrey.arnold@gmail.com>
 Author: jrnold
-Version: 1.0
+Version: 1.1-0
 License: GPL-3
 Title: 
-Description: 
+Description: Extra Stan related R functionality.
+    Run Stan compiled models from command line. Read
+    csv files from stan. Write dump files readable
+    by Stan
 Depends:
     methods,
     mcmc4
@@ -15,8 +18,8 @@ Suggests:
     testthat,
     roxygen2
 Collate:
+    '00-package.R'
     'utilities.R'
+    'read_stan.R'
     'run_stan.R'
     'write.stan.R'
-    '00-package.R'
-    'McmcLongStan.R'

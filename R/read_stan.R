@@ -107,13 +107,17 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
 
 ##' Read STAN output
 ##'
+##' Read csv files produced by Stan.
+##'
+##' This returns both the data in the csv, as well as all the metadata
+##' in the header of the file.
+##'
 ##' @param file \code{character} name of output file produced by a STAN model.
 ##' @param chain_id \code{integer} Values of \code{chain_id} to use
 ##' for each chain. These are used instead of the values in the header
 ##' of the csv are ignored.
 ##' @return \code{\link[mcmc4]{McmcLong}} object.
 ##' @export
-##'
 read_stan_csv <- function(files, chain_id=seq_along(files)) {
     do.call(c, mapply(function(x, i) read_stan_csv_one(x, i),
                       files, chain, SIMPLIFY=FALSE, USE.NAMES=FALSE))
