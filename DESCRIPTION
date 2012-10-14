@@ -19,7 +19,6 @@ Suggests:
     roxygen2
 Collate:
     '00-package.R'
-    'utilities.R'
     'read_stan.R'
     'run_stan.R'
-    'write.stan.R'
+    'write_stan.R'

@@ -127,7 +127,7 @@ write_stan_default <- function(list, file = "standata.R", append = FALSE,
     }
 }
 
-##' Methods for function \code{write.stan}
+##' Methods for function \code{writeStan}
 ##'
 ##' This writes dump files, like \code{\link{dump}}, but with a few
 ##' tweaks to ensure that they will works as input for Stan.
@@ -139,15 +139,15 @@ write_stan_default <- function(list, file = "standata.R", append = FALSE,
 ##' @param envir \code{environment} In which to look for varaibles.
 ##' @param precheck \code{logical} Check for errors before writing to file.
 ##' @param width \code{numeric} Width of lines in the output file.
-##' @aliases write_stan-methods
-##' @aliases write_stan,character-method
-##' @aliases write_stan,list-method
+##' @aliases writeStan-methods
+##' @aliases writeStan,character-method
+##' @aliases writeStan,list-method
 ##' @export
-setGeneric("write_stan", function(list, ...) { standardGeneric("write.stan")})
+setGeneric("writeStan", function(list, ...) { standardGeneric("writeStan")})
 
-setMethod("write_stan", "character", write_stan_default)
+setMethod("writeStan", "character", write_stan_default)
 
-setMethod("write_stan", "list",
+setMethod("writeStan", "list",
           function(list, ...) {
               write.stan(names(list), envir=as.environment(list), ...)
           })

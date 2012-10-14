@@ -1,7 +1,7 @@
 export(make_stan_names)
 export(read_stan_csv)
 export(run_stan_model)
-exportMethods(write.stan)
+exportMethods(writeStan)
 import(mcmc4)
 import(plyr)
 import(stringr)
