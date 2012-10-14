@@ -2,7 +2,7 @@
 \alias{McmcLongStan}
 \title{Read STAN output}
 \usage{
-  McmcLongStan(file, chain = 1)
+  McmcLongStan(files, chain = seq_along(files))
 }
 \arguments{
   \item{file}{\code{character} name of output file produced

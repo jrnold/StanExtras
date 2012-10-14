@@ -17,6 +17,6 @@ Suggests:
 Collate:
     'utilities.R'
     'run_stan.R'
-    'StanExtras-package.R'
     'write.stan.R'
-    'read.stan.R'
+    '00-package.R'
+    'McmcLongStan.R'
