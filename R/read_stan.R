@@ -30,16 +30,21 @@ parse_stan_header_lines <- function(lines) {
     }
     chains <- data.frame(chains)
 
+    ## Saved parameters can be longer than step size multipliers because
+    ## it includes generated quantities.
     parln <- lines[which(str_detect(lines, "^lp__,"))]
     parameters <- str_split(parln, ",")[[1]]
     parameters <- parameters[4:length(parameters)]
+    npar <- length(parameters)
 
     parameter_mass_pat <- "parameter step size multipliers:"
     parameter_mass_line <-
         lines[which(str_detect(lines, parameter_mass_pat)) + 1]
     step_size_multipliers <-
-        setNames(as.numeric(str_split(str_sub(parameter_mass_line, 3), ",")[[1]]),
-                 parameters)
+        as.numeric(str_split(str_sub(parameter_mass_line, 3), ",")[[1]])
+    nmass <- length(step_size_multipliers)
+    step_size_multipliers <- c(step_size_multipliers, rep(NA, npar - nmass))
+
     par_chains <- data.frame(chain_id = chains$chain_id,
                              parname = parameters,
                              step_size_multipliers=step_size_multipliers)
