@@ -83,9 +83,7 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
     x <- x[ , setdiff(names(x), c("treedepth__", "stepsize__"))]
 
     ## Parse parameters
-    parnames <- colnames(x)
-    parsed_par <- mcmc_parse_parname_stan(parnames)
-    metadata <- McmcParameters(parsed_par)
+    parnames <- mcmc_parse_parname_stan(colnames(x))
     
     ## Rejected rows
     ## Make sure that treedepth, stepsize already removed,
@@ -104,6 +102,7 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
                               stepsize = stepsize,
                               rejected = rejected)
     McmcLong(x,
+             parnames=parnames,
              chains=chains,
              par_chains=header$par_chains,
              chain_iters=chain_iters)
