@@ -31,7 +31,7 @@ parse_stan_header_lines <- function(lines) {
     chains <- data.frame(chains)
 
     ## Saved parameters can be longer than step size multipliers because
-    ## it includes generated quantities.
+    ## they include generated quantities.
     parln <- lines[which(str_detect(lines, "^lp__,"))]
     parameters <- str_split(parln, ",")[[1]]
     parameters <- parameters[4:length(parameters)]
@@ -88,6 +88,8 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
     ## Rejected rows
     ## Make sure that treedepth, stepsize already removed,
     ## and iteration not yet added
+    ## This uses the same method as coda, calculates it for all
+    ## parameters since HMC samples the entire vector of parameters.
     niter <- nrow(x)
     rejected <- c(FALSE, apply(x[2:niter, ] == x[1:(niter-1), ], 1, all))
 
