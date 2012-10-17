@@ -55,7 +55,7 @@ parse_stan_header_file <- function(file) {
     parse_stan_header_lines(readLines(file, 30))
 }
 
-read_stan_csv_one <- function(file, chain_id=NULL) {
+read_stan_csv_one <- function(file, chain_id=NULL, model=list()) {
     header <- parse_stan_header_file(file)
     npar <- nrow(header$par_chains)
     if (is.null(chain_id)) {
@@ -107,8 +107,8 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
              parnames=parnames,
              chains=chains,
              par_chains=header$par_chains,
-             chain_iters=chain_iters)
-
+             chain_iters=chain_iters,
+             model=model)
 }
 
 ##' Read STAN output
@@ -122,10 +122,11 @@ read_stan_csv_one <- function(file, chain_id=NULL) {
 ##' @param chain_id \code{integer} Values of \code{chain_id} to use
 ##' for each chain. These are used instead of the values in the header
 ##' of the csv are ignored.
+##' @param
 ##' @return \code{\link[mcmc4]{McmcLong}} object.
 ##' @export
 read_stan_csv <- function(files, chain_id=seq_along(files)) {
-    do.call(c, mapply(function(x, i) read_stan_csv_one(x, i),
+    do.call(c, mapply(function(x, i, model) read_stan_csv_one(x, i, model),
                       files, chain_id, SIMPLIFY=FALSE, USE.NAMES=FALSE))
 
 }
