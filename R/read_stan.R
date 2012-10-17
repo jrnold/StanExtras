@@ -55,7 +55,7 @@ parse_stan_header_file <- function(file) {
     parse_stan_header_lines(readLines(file, 30))
 }
 
-read_stan_csv_one <- function(file, chain_id=NULL, model=list()) {
+read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
     header <- parse_stan_header_file(file)
     npar <- nrow(header$par_chains)
     if (is.null(chain_id)) {
@@ -108,7 +108,7 @@ read_stan_csv_one <- function(file, chain_id=NULL, model=list()) {
              chains=chains,
              par_chains=header$par_chains,
              chain_iters=chain_iters,
-             model=model)
+             metadata=metadata)
 }
 
 ##' Read STAN output
