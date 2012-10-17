@@ -126,7 +126,7 @@ read_stan_csv_one <- function(file, chain_id=NULL, model=list()) {
 ##' @return \code{\link[mcmc4]{McmcLong}} object.
 ##' @export
 read_stan_csv <- function(files, chain_id=seq_along(files)) {
-    do.call(c, mapply(function(x, i, model) read_stan_csv_one(x, i, model),
+    do.call(c, mapply(function(x, i) read_stan_csv_one(x, i),
                       files, chain_id, SIMPLIFY=FALSE, USE.NAMES=FALSE))
 
 }
