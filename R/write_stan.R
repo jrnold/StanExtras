@@ -58,8 +58,7 @@ trunc_inf <- function(x) {
 write_stan_default <- function(list, file = "standata.R", append = FALSE,
                         scalars = character(),
                         envir = parent.frame(),
-                        precheck=TRUE, width = options("width")$width,
-                        ...)
+                        precheck=TRUE, width = options("width")$width)
 {
     ## copied from base::dump
     if (is.character(file)) {
@@ -149,7 +148,7 @@ setMethod("writeStan", "character", write_stan_default)
 
 setMethod("writeStan", "list",
           function(list, ...) {
-              callGeneric(names(list), envir=as.environment(list), ...)
+              callGeneric(list=names(list), envir=as.environment(list), ...)
           })
 
 ##' Make valid Stan variable names

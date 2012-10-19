@@ -126,7 +126,7 @@ read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
 ##' @export
 read_stan_csv <- function(file, chain_id=seq_along(files)) {
     do.call(c, mapply(function(x, i) read_stan_csv_one(x, i),
-                      files, chain_id, SIMPLIFY=FALSE, USE.NAMES=FALSE))
+                      file, chain_id, SIMPLIFY=FALSE, USE.NAMES=FALSE))
 
 }
 

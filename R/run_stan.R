@@ -31,7 +31,7 @@ run_stan_model <- function(model, data=NULL,
     if (!is.null(data)) {
         if (is.list(data)) {
             data.file <- tempfile(fileext=".R")
-            writeStan(data, file=data.file, scalars=scalars)
+            writeStan(list=data, file=data.file, scalars=scalars)
         } else if (is.character(data)) {
             data.file <- data
         } else {
@@ -43,7 +43,7 @@ run_stan_model <- function(model, data=NULL,
     if (!is.null(init)) {
         if (is.list(init)) {
             init.file <- tempfile(fileext=".R")
-            writeStan(init, file=init.file, scalars=scalars)
+            writeStan(list=init, file=init.file, scalars=scalars)
         } else if (is.character(init)) {
             init.file <- init
         } else {
