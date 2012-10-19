@@ -31,8 +31,8 @@ lp__,treedepth__,stepsize__,alpha,beta,sigma
 
 test_that("parse_stan_header_lines works", {
     x <- StanExtras:::parse_stan_header_lines(lines)
-    test_is(x, "list")
-    test_equal(names(x), c("chains", "par_chains"))
+    expect_is(x, "list")
+    expect_equal(names(x), c("chains", "par_chains"))
 })
 
 

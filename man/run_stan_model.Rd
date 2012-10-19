@@ -25,9 +25,6 @@
   is needed so that scalar values are correctly written to
   the dump file.}
 
-  \item{data.file}{\code{character}. Name of file with data
-  values.}
-
   \item{...}{Options to be passed to the command line. The
   arguments names and values of the arguments in \code{...}
   are converted to command line arguments. E.g. the

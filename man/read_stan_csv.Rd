@@ -2,11 +2,11 @@
 \alias{read_stan_csv}
 \title{Read STAN output}
 \usage{
-  read_stan_csv(files, chain_id = seq_along(files))
+  read_stan_csv(file, chain_id = seq_along(files))
 }
 \arguments{
-  \item{file}{\code{character} name of output file produced
-  by a STAN model.}
+  \item{file}{\code{character} names of output file
+  produced by a STAN model.}
 
   \item{chain_id}{\code{integer} Values of \code{chain_id}
   to use for each chain. These are used instead of the

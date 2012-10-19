@@ -14,7 +14,6 @@
 ##' @param scalars \code{character} vector with the names of variables
 ##' (in both data and init) which are scalars. This is needed so that
 ##' scalar values are correctly written to the dump file.
-##' @param data.file \code{character}. Name of file with data values.
 ##' @param ... Options to be passed to the command line. The arguments
 ##' names and values of the arguments in \code{...} are converted to
 ##' command line arguments. E.g. the argument \code{seed=1234}
@@ -32,7 +31,7 @@ run_stan_model <- function(model, data=NULL,
     if (!is.null(data)) {
         if (is.list(data)) {
             data.file <- tempfile(fileext=".R")
-            write_stan(data, file=data.file, scalars=scalars)
+            writeStan(data, file=data.file, scalars=scalars)
         } else if (is.character(data)) {
             data.file <- data
         } else {
@@ -44,7 +43,7 @@ run_stan_model <- function(model, data=NULL,
     if (!is.null(init)) {
         if (is.list(init)) {
             init.file <- tempfile(fileext=".R")
-            write_stan(init, file=init.file, scalars=scalars)
+            writeStan(init, file=init.file, scalars=scalars)
         } else if (is.character(init)) {
             init.file <- init
         } else {
