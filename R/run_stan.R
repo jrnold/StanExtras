@@ -1,15 +1,19 @@
 ##' Run a compiled STAN model.
 ##'
+##' This is a simple wrapper for running a compiled Stan model via the
+##' commmand line. It does not handle multiple chains. However, it
+##' will convert R data to files.
+##'
 ##' @param model \code{character} The path to the compiled STAN model.
-##' @param data \code{list}. A list with data.
-##' @param data.file \code{characer}. Name of file with data, or file
-##' to save \code{data} to.
-##' @param init \code{character}. A list with initial values.
-##' @param data.file \code{characer}. Name of file with initial values, or file
-##' to save \code{init} to.
+##' @param data \code{list} with data or \code{character} specifying
+##' the file name. If \code{NULL}, do not pass any data.
+##' @param init \code{list} with data; \code{character} specifying the
+##' file name; If \code{NULL}, do not set initial values.
 ##' @param samples \code{character} Path in which to save the samples. The default is a
 ##' temporary file.
-##' @param return.samples \code{logical}. Return samples to
+##' @param scalars \code{character} vector with the names of variables
+##' (in both data and init) which are scalars. This is needed so that
+##' scalar values are correctly written to the dump file.
 ##' @param data.file \code{character}. Name of file with data values.
 ##' @param ... Options to be passed to the command line. The arguments
 ##' names and values of the arguments in \code{...} are converted to
@@ -20,27 +24,35 @@
 ##' @export
 run_stan_model <- function(model, data=NULL,
                            init=NULL, samples=NULL,
-                           data.file=NULL, init.file=NULL,
-                           return.samples=TRUE, ...) {
+                           scalars = character(),
+                           ...) {
     opts <- list(...)
     optstring <- c()
+    ## Set data
     if (!is.null(data)) {
-        if (is.null(data.file)) {
+        if (is.list(data)) {
             data.file <- tempfile(fileext=".R")
+            write_stan(data, file=data.file, scalars=scalars)
+        } else if (is.character(data)) {
+            data.file <- data
+        } else {
+            stop("Argument 'data' must be an object of class: list, character, or NULL")
         }
-        write.stan(data, file=data.file)
+        optstring <- c(optstring, sprintf("--data=%s", shQuote(data.file)))
     }
-    optstring <- c(optstring, sprintf("--data=%s", shQuote(data.file)))
+    ## Set initial values
     if (!is.null(init)) {
-        if (is.null(init.file)) {
+        if (is.list(init)) {
             init.file <- tempfile(fileext=".R")
+            write_stan(init, file=init.file, scalars=scalars)
+        } else if (is.character(init)) {
+            init.file <- init
+        } else {
+            stop("Argument 'init' must be an object of class: list, character, or NULL")
         }
-        init.file <- tempfile(fileext=".R")
-        write.stan(init, file=init.file)
-    }
-    if (!is.null(init.file)) {
         optstring <- c(optstring, sprintf("--init=%s", init.file))
     }
+    ## Samples
     if (is.null(samples)) {
         samples <- tempfile(fileext=".csv")
     }

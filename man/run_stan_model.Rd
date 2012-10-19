@@ -3,28 +3,27 @@
 \title{Run a compiled STAN model.}
 \usage{
   run_stan_model(model, data = NULL, init = NULL,
-    samples = NULL, data.file = NULL, init.file = NULL,
-    return.samples = TRUE, ...)
+    samples = NULL, scalars = character(), ...)
 }
 \arguments{
   \item{model}{\code{character} The path to the compiled
   STAN model.}
 
-  \item{data}{\code{list}. A list with data.}
+  \item{data}{\code{list} with data or \code{character}
+  specifying the file name. If \code{NULL}, do not pass any
+  data.}
 
-  \item{data.file}{\code{characer}. Name of file with data,
-  or file to save \code{data} to.}
-
-  \item{init}{\code{character}. A list with initial
-  values.}
-
-  \item{data.file}{\code{characer}. Name of file with
-  initial values, or file to save \code{init} to.}
+  \item{init}{\code{list} with data; \code{character}
+  specifying the file name; If \code{NULL}, do not set
+  initial values.}
 
   \item{samples}{\code{character} Path in which to save the
   samples. The default is a temporary file.}
 
-  \item{return.samples}{\code{logical}. Return samples to}
+  \item{scalars}{\code{character} vector with the names of
+  variables (in both data and init) which are scalars. This
+  is needed so that scalar values are correctly written to
+  the dump file.}
 
   \item{data.file}{\code{character}. Name of file with data
   values.}
@@ -38,6 +37,8 @@
   \code{test_grad=TRUE}.}
 }
 \description{
-  Run a compiled STAN model.
+  This is a simple wrapper for running a compiled Stan
+  model via the commmand line. It does not handle multiple
+  chains. However, it will convert R data to files.
 }
 

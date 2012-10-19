@@ -112,8 +112,8 @@ write_stan_default <- function(list, file = "standata.R", append = FALSE,
         ## 2. vector: length > 1
         ## 3. array / matrix
         if (is.null(dim(vv))) {
-            if (length(vv) == 1 && v %in% scalars) {
-                cat0(charv, "\n", file=file)
+            if (v %in% scalars) {
+                cat0(charv[1], "\n", file=file)
             } else {
                 cat0(str_wrap(sprintf("c(%s)", charv), width=width), "\n",
                      file=file)
@@ -149,7 +149,7 @@ setMethod("writeStan", "character", write_stan_default)
 
 setMethod("writeStan", "list",
           function(list, ...) {
-              write.stan(names(list), envir=as.environment(list), ...)
+              callGeneric(names(list), envir=as.environment(list), ...)
           })
 
 ##' Make valid Stan variable names

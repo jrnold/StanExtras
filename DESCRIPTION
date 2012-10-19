@@ -1,7 +1,7 @@
 Package: StanExtras
 Maintainer: Jeffrey Arnold <jeffrey.arnold@gmail.com>
 Author: jrnold
-Version: 1.1.1
+Version: 1.1.2
 License: GPL-3
 Title: 
 Description: Extra Stan related R functionality.

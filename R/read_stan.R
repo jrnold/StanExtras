@@ -122,7 +122,6 @@ read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
 ##' @param chain_id \code{integer} Values of \code{chain_id} to use
 ##' for each chain. These are used instead of the values in the header
 ##' of the csv are ignored.
-##' @param
 ##' @return \code{\link[mcmc4]{McmcLong}} object.
 ##' @export
 read_stan_csv <- function(files, chain_id=seq_along(files)) {

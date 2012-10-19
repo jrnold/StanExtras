@@ -1,8 +1,8 @@
 \name{writeStan}
 \alias{writeStan}
-\alias{writeStan-methods}
 \alias{writeStan,character-method}
 \alias{writeStan,list-method}
+\alias{writeStan-methods}
 \title{Methods for function \code{writeStan}}
 \arguments{
   \item{list}{Data objects to write to file}
