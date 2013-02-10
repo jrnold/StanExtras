@@ -22,3 +22,4 @@ Collate:
     '00-package.R'
     'read_stan.R'
     'run_stan.R'
+    'write_rdump.R'
