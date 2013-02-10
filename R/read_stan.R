@@ -64,12 +64,12 @@ read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
         header$chains$chain_id <- as.integer(chain_id)
         header$par_chains$chain_id <- as.integer(chain_id)        
     }
-    chains <- within(header$chains, {
-         start <- as.integer(ifelse(warmup, warmup + 1, 1))
-         end <- as.integer(iter)
-         thin <- as.integer(thin)
-         iter <- NULL
-    })
+    chains <- header$chins
+    header$start <- as.integer(ifelse(header$warmup, header$warmup + 1, 1))
+    header$end <- as.integer$iter
+    header$thin <- as.integer(header$thin)
+    header$iter <- NULL
+
     ## use prior knowledge to speed up reading files
     ## lpp, stepsize, treedepth, ...
     ## npar <- ncol(read.csv(file, comment.char="#", nrows=1)) - 3

@@ -2,7 +2,7 @@
 \alias{read_stan_csv}
 \title{Read STAN output}
 \usage{
-  read_stan_csv(file, chain_id = seq_along(files))
+  read_stan_csv(file, chain_id = seq_along(file))
 }
 \arguments{
   \item{file}{\code{character} names of output file

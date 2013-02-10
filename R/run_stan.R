@@ -11,9 +11,6 @@
 ##' file name; If \code{NULL}, do not set initial values.
 ##' @param samples \code{character} Path in which to save the samples. The default is a
 ##' temporary file.
-##' @param scalars \code{character} vector with the names of variables
-##' (in both data and init) which are scalars. This is needed so that
-##' scalar values are correctly written to the dump file.
 ##' @param ... Options to be passed to the command line. The arguments
 ##' names and values of the arguments in \code{...} are converted to
 ##' command line arguments. E.g. the argument \code{seed=1234}
@@ -22,16 +19,17 @@
 ##'
 ##' @export
 run_stan_model <- function(model, data=NULL,
-                           init=NULL, samples=NULL,
-                           scalars = character(),
-                           ...) {
+                           init=NULL, samples=NULL, ...) {
     opts <- list(...)
     optstring <- c()
     ## Set data
     if (!is.null(data)) {
         if (is.list(data)) {
+            if (is.list(data)) {
+                data <- as.environment(data)
+            }
             data.file <- tempfile(fileext=".R")
-            writeStan(list=data, file=data.file, scalars=scalars)
+            stan_rdump(list=ls(data), file=data.file, envir=data)
         } else if (is.character(data)) {
             data.file <- data
         } else {
@@ -42,8 +40,9 @@ run_stan_model <- function(model, data=NULL,
     ## Set initial values
     if (!is.null(init)) {
         if (is.list(init)) {
+            init <- as.environment(init)
             init.file <- tempfile(fileext=".R")
-            writeStan(list=init, file=init.file, scalars=scalars)
+            stan_rdump(ls(init), file=init.file, envir=init)
         } else if (is.character(init)) {
             init.file <- init
         } else {

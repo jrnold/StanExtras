@@ -13,7 +13,8 @@ Depends:
     mcmc4 (>= 1.1.3)
 Imports:
     plyr,
-    stringr
+    stringr,
+    rstan
 Suggests:
     testthat,
     roxygen2
@@ -21,4 +22,3 @@ Collate:
     '00-package.R'
     'read_stan.R'
     'run_stan.R'
-    'write_stan.R'
