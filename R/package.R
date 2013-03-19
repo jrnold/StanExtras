@@ -5,5 +5,6 @@
 #' @import plyr
 #' @import stringr
 #' @import rstan
+#' @import mcmcdb
 NULL
 

@@ -12,7 +12,8 @@ Depends:
 Imports:
     plyr,
     stringr,
-    rstan (>= 1.2.0)
+    rstan (>= 1.2.0),
+    mcmcdb
 Suggests:
     testthat,
     roxygen2
