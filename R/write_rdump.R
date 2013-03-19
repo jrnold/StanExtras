@@ -31,10 +31,10 @@ setMethod("write_rdump", "character", write_rdump_character)
 
 setMethod("write_rdump", "environment",
           function(list, ...) {
-              callGeneric(ls(list), envir=list, ...)              
+              callGeneric(list=ls(list), envir=list, ...)              
           })
 
 setMethod("write_rdump", "list",
           function(list, ...) {
-              callGeneric(as.environment(list), ...)
+              callGeneric(list=as.environment(list), ...)
           })
