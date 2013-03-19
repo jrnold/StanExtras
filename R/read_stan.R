@@ -2,6 +2,7 @@
 #' @export read_stan_csv
 NULL
 
+# For Stan <= 1.2.0 
 parse_stan_header_lines <- function(lines) {
   header_classes <-
     c(stan_version_major = "integer",
@@ -17,6 +18,7 @@ parse_stan_header_lines <- function(lines) {
       iter = "integer",
       warmup = "integer",
       thin = "integer",
+      nondiag_mass = "integer",
       equal_step_sizes = "integer",
       leapfrog_steps = "integer",
       max_treedepth = "integer",
@@ -25,34 +27,61 @@ parse_stan_header_lines <- function(lines) {
       delta = "numeric",
       gamma = "numeric",
       step_size = "numeric")
-  header_lines <- lines[str_detect(lines, "^# ")]
-  header_stuff <- na.omit(str_match(header_lines, "# +(.*?)=(\\S+)"))
-  chains <- as.list(header_stuff[ , 3])
-  names(chains) <- gsub(" ", "_", header_stuff[ , 2])
-  for (i in names(header_classes)) {
-    chains[[i]] <- as(chains[[i]], header_classes[i])
+  
+  comments <- lines[str_detect(lines, "^# ")]
+
+  header <- list()
+  ## select lines where key=value
+  eq_lines <- na.omit(str_match(header_lines, "# +(.*?)=(\\S+)"))
+  for (i in 1:nrow(eq_lines)) {
+    keyname <- gsub(" ", "_", eq_lines[i, 2])
+    value <- as(eq_lines[i, 3], header_classes[keyname])
+    header[[keyname]] <- value
   }
-  chains <- data.frame(chains)
   
   ## Saved parameters can be longer than step size multipliers because
   ## they include generated quantities.
   parln <- lines[which(str_detect(lines, "^lp__,"))]
-  parameters <- str_split(parln, ",")[[1]]
-  parameters <- parameters[4:length(parameters)]
-  npar <- length(parameters)
-  
-  parameter_mass_pat <- "parameter step size multipliers:"
-  parameter_mass_line <-
-    lines[which(str_detect(lines, parameter_mass_pat)) + 1]
-  step_size_multipliers <-
-    as.numeric(str_split(str_sub(parameter_mass_line, 3), ",")[[1]])
-  nmass <- length(step_size_multipliers)
-  step_size_multipliers <- c(step_size_multipliers, rep(NA, npar - nmass))
-  
-  par_chains <- data.frame(chain_id = chains$chain_id,
-                           parname = parameters,
-                           step_size_multipliers=step_size_multipliers)
-  list(chains=chains, par_chains=par_chains)
+  header[["colnames"]] <- str_split(parln, ",")[[1]]
+
+  ## Sample or Optimization
+  if (!is.na(str_match(lines[1], "Samples"))) {
+    header[["point_estimate"]] <- FALSE
+  } else if (!is.na(str_match(lines[1], "Point Estimate"))) {
+    header[["point_estimate"]] <- TRUE
+  } else {
+    print(sprintf("First line noes not appear to be sampling or point estimate:\n%s",
+                  lines[1]))
+    header[["point_estimate"]] <- NA
+  }
+
+  ## Adaption method
+  adaptation <- na.omit(str_match(comments,
+                                  "\\((.*?)\\) adaptation finished"))[ , 2]
+  if (length(adaptation)) {
+    header[["adaptation_type"]] <- adaptation
+    if (adaptation == "mcmc::nuts_nondiag") {
+      cov_line <- which(str_detect(lines, "estimated covariance matrix:"))
+      cov_sz <- str_count(lines[cov_line + 1], ",")
+      cov_matrix <- matrix(NA_real_, cov_sz, cov_sz)
+      for (i in seq_len(cov_sz)) {
+        row <- str_sub(lines[cov_line + i], 2L, -2L)
+        cov_matrix[i, ] <- as.numeric(str_split(row, ",")[[1]])
+      }
+      header[["covariance_matrix"]] <- cov_matrix
+    } else if (adaptation == "mcmc::nuts_diag") {
+      parameter_mass_pat <- "parameter step size multipliers:"
+      parameter_mass_line <-
+        lines[which(str_detect(lines, parameter_mass_pat)) + 1]
+      step_size_multipliers <-
+        as.numeric(str_split(str_sub(parameter_mass_line, 3), ",")[[1]])
+      header[["step_size_multipliers"]] <- step_size_multipliers
+    }
+  } else {
+    header[["adaptation_type"]] <- NA_character_
+  }
+
+  header
 }
 
 parse_stan_header_file <- function(file) {
@@ -61,34 +90,38 @@ parse_stan_header_file <- function(file) {
 
 read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
   header <- parse_stan_header_file(file)
-  npar <- nrow(header$par_chains)
-  colClasses <- c("numeric", "integer", "numeric",
-                  rep("numeric", npar))
+  ncolumns <- length(header[["colnames"]])
+  pointest <- header[["point_estimate"]]
+  if (!pointest) {
+    colClasses <- c("numeric", "integer", "numeric", rep("numeric", ncolumns - 3))
+  } else {
+    colClasses <- rep("numeric", ncolumns)
+  }
   x <- read.csv(file, header=TRUE, comment.char="#", colClasses=colClasses)
-  attr(x, "header") <- x
-  ## Rejected rows
-  ## Make sure that treedepth, stepsize already removed,
-  ## and iteration not yet added
-  ## This uses the same method as coda, calculates it for all
-  ## parameters since HMC samples the entire vector of parameters.
-  ## niter <- nrow(x)
-  ## rejected <- c(FALSE, apply(x[2:niter, ] == x[1:(niter-1), ], 1, all))
+  niter <- nrow(x)
+  if (!pointest) {
+    attr(x, "rejected") <- unname(c(FALSE, apply(x[2:niter, ] == x[1:(niter-1), ], 1, all)))
+  }
+  attr(x, "header") <- header
   x
 }
 
 #' Read STAN output
 #'
 #' Read csv files produced by Stan.
-#'
-#' This returns both the data in the csv, as well as all the metadata
-#' in the header of the file.
+#' This returns both the sample values and the metadata in the comments
+#' of the file.
 #'
 #' @param file \code{character} name of an output file produced by a STAN model.
 #' @param chain_id \code{integer} Values of \code{chain_id} to use
 #' for each chain. These are used instead of the values in the header
 #' of the csv are ignored.
 #' 
-#'  @return \code{matrix} object with header information in an attribute.
+#' @return \code{data.frame} with attributes
+#' \describe{
+#' \item{\code{header}}{\code{list} with header information}
+#' \item{\code{rejected}}{A \code{logical} vector indicating whether the iteration was a rejected sample (for samples only)}
+#' }
 read_stan_csv <- function(file) {
   read_stan_csv_one(file)
 }
