@@ -1,23 +1,26 @@
-##' Write Stan-compatible R-dump
-##'
-##' Generic method that wraps \code{\link[rstan]{stan_rdump}} to
-##' accept \code{list}, \code{environment}, and \code{character}.
-##'
-##' @param list Objects
-##' @param ... Pass to \code{\link[rstan]{stan_rdump}}.
-##'
-##' @name write_rdump-methods
-##' @rdname write_rdump-methods
-##' @aliases write_rdump
-##' @aliases write_rdump-methods
-##' @aliases write_rdump,character-method
-##' @aliases write_rdump,environment-method
-##' @aliases write_rdump,list-method
-##' @keywords methods
-##' @docType methods
-##'
-##' @seealso \code{\link[rstan]{stan_rdump}}.
-##' @export
+#' @include package.R
+#' @exportMethod write_rdump
+NULL
+
+#' Write Stan-compatible R-dump
+#'
+#' Generic method that wraps \code{\link[rstan]{stan_rdump}} to
+#' accept \code{list}, \code{environment}, and \code{character}.
+#'
+#' @param list Objects
+#' @param ... Pass to \code{\link[rstan]{stan_rdump}}.
+#'
+#' @name write_rdump-methods
+#' @rdname write_rdump-methods
+#' @aliases write_rdump
+#' @aliases write_rdump-methods
+#' @aliases write_rdump,character-method
+#' @aliases write_rdump,environment-method
+#' @aliases write_rdump,list-method
+#' @keywords methods
+#' @docType methods
+#'
+#' @seealso \code{\link[rstan]{stan_rdump}}.
 setGeneric("write_rdump",
            function(list, ...) {
                standardGeneric("write_rdump")

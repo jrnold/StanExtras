@@ -28,9 +28,13 @@
   set the argument to \code{TRUE}. E.g.
   \code{test_grad=TRUE}.}
 }
+\value{
+  Invisibly returns a \code{character} vector with the name
+  of the output file.
+}
 \description{
-  This is a simple wrapper for running a compiled Stan
-  model via the commmand line. It does not handle multiple
-  chains. However, it will convert R data to files.
+  This is a simple wrapper for running an already compiled
+  Stan model via the commmand line. It does not handle
+  multiple chains; this could be handled with a loop.
 }
 

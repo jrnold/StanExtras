@@ -2,10 +2,10 @@
 \alias{read_stan_csv}
 \title{Read STAN output}
 \usage{
-  read_stan_csv(file, chain_id = seq_along(file))
+  read_stan_csv(file)
 }
 \arguments{
-  \item{file}{\code{character} names of output file
+  \item{file}{\code{character} name of an output file
   produced by a STAN model.}
 
   \item{chain_id}{\code{integer} Values of \code{chain_id}
@@ -13,7 +13,8 @@
   values in the header of the csv are ignored.}
 }
 \value{
-  \code{\link[mcmc4]{McmcLong}} object.
+  \code{matrix} object with header information in an
+  attribute.
 }
 \description{
   Read csv files produced by Stan.
