@@ -106,20 +106,16 @@ read_stan_csv_one <- function(file, chain_id=NULL, metadata=list()) {
   x
 }
 
-#' Read STAN output
+#' @title Read STAN output
 #'
-#' Read csv files produced by Stan.
-#' This returns both the sample values and the metadata in the comments
+#' @description Read csv files produced by Stan. This returns both the sample values and the metadata in the comments
 #' of the file.
 #'
 #' @param file \code{character} name of an output file produced by a STAN model.
-#' @param chain_id \code{integer} Values of \code{chain_id} to use
-#' for each chain. These are used instead of the values in the header
-#' of the csv are ignored.
 #' 
-#' @return \code{data.frame} with attributes
+#' @return A \code{data.frame} with attributes
 #' \describe{
-#' \item{\code{header}}{\code{list} with header information}
+#' \item{\code{header}}{A \code{list} containing header information}
 #' \item{\code{rejected}}{A \code{logical} vector indicating whether the iteration was a rejected sample (for samples only)}
 #' }
 read_stan_csv <- function(file) {
