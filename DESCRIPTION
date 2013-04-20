@@ -10,8 +10,6 @@ Description: Miscellaneous Stan related functions not
 Depends:
     methods,
 Imports:
-    plyr,
-    stringr,
     rstan (>= 1.2.0)
 Suggests:
     testthat,
