@@ -1,7 +1,7 @@
 Package: stanmisc
 Maintainer: Jeffrey Arnold <jeffrey.arnold@gmail.com>
 Author: Jeffrey Arnold <jeffrey.arnold@gmail.com>
-Version: 0.0.1
+Version: 0.1.0
 License: GPL-3
 Title: Miscellaneous Stan related functions
 Description: Miscellaneous Stan related functions not
@@ -12,13 +12,11 @@ Depends:
 Imports:
     plyr,
     stringr,
-    rstan (>= 1.2.0),
-    mcmcdb
+    rstan (>= 1.2.0)
 Suggests:
     testthat,
     roxygen2
 Collate:
     'package.R'
-    'read_stan.R'
     'run_stan.R'
     'write_rdump.R'
