@@ -1,3 +1,2 @@
 export(run_stan_model)
 exportMethods(write_rdump)
-import(rstan)
