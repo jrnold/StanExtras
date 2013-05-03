@@ -1,7 +1,18 @@
 Package: stanmisc
 Maintainer: Jeffrey Arnold <jeffrey.arnold@gmail.com>
 Author: Jeffrey Arnold <jeffrey.arnold@gmail.com>
-Version: 0.2.0
+Copyright: Jiqiang Guo <guojq28@gmail.com>,   
+        Michael Betancourt <betanalpha@gmail.com>,
+        Marcus Brubaker <mbrubake@cs.toronto.edu>,  
+        Bob Carpenter <carp@alias-i.com>,  
+        Yuanjun Gao <yg2312@columbia.edu>,
+        Ben Goodrich <bg2382@columbia.edu>, 
+        Matt Hoffman <mdhoffma@cs.princeton.edu>,  
+        Daniel Lee <bearlee@alum.mit.edu>, 
+        Peter Li <li.peter94@gmail.com>,
+        Michael Malecki <malecki@gmail.com>,  
+        Andrew Gelman <gelman@stat.columbia.edu> 
+Version: 0.3.0
 License: GPL-3
 Title: Miscellaneous Stan related functions
 Description: Miscellaneous Stan related functions not
@@ -9,8 +20,6 @@ Description: Miscellaneous Stan related functions not
     alternative csv reader.
 Depends:
     methods,
-Imports:
-    rstan (>= 1.2.0)
 Suggests:
     testthat,
     roxygen2
