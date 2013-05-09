@@ -1,4 +1,5 @@
 #' @include package.R
+#' @include rstan-code.R
 #' @exportMethod write_rdump
 NULL
 

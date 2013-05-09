@@ -2,9 +2,7 @@
 #'
 #' @name StanExtras
 #' @docType package
-#' @import plyr
 #' @import stringr
-#' @import rstan
-#' @import mcmcdb
+#' @import plyr
 NULL
 
