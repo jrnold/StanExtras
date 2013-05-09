@@ -120,7 +120,7 @@ read_stan_samples <- function(file) {
   treedepth <- as.integer(x[ , "treedepth__"])
   stepsize <- x[ , "stepsize__"]
   x <- new("StanSamples",
-           x[ , !colnames(x) %in% c("treedepth__", "stepsize__")])
+           x[ , !colnames(x) %in% c("treedepth__", "stepsize__"), drop=FALSE])
   x@treedepth <- treedepth
   x@stepsize <- stepsize
   niter <- nrow(x)
@@ -143,9 +143,13 @@ read_stan_samples <- function(file) {
     }
   }
   if (!x@point_estimate) {
-    slot(x, "rejected") <- unname(c(FALSE,
-                                    apply(x[2:niter, ]
-                                          == x[1:(niter-1), ], 1, all)))
+    if (niter > 1) {
+      slot(x, "rejected") <- unname(c(FALSE,
+                                      apply(x[2:niter, ]
+                                            == x[1:(niter-1), ], 1, all)))
+    } else {
+      slot(x, "rejected") <- FALSE
+    }
     if (x@warmup) {
       slot(x, "is_warmup") <- seq_len(niter) <= ceiling(x@warmup / x@thin)
     } else {
