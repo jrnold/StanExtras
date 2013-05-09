@@ -1,4 +1,4 @@
 library(testthat)
-library(StanExtras)
+library(stanmisc)
 
-test_package("StanExtras")
+test_package("stanmisc")

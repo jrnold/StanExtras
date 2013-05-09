@@ -1,5 +1,6 @@
-export(read_stan_csv)
+export(read_stan_samples)
 export(run_stan_model)
+exportClasses(StanSamples)
 exportMethods(write_rdump)
 import(mcmcdb)
 import(plyr)
